@@ -1,0 +1,352 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-sans);
+  /* Token brand "Deep Indigo" — dipakai langsung: bg-brand-indigo, text-brand-teal, dst. */
+  --color-brand-indigo: var(--brand-indigo);
+  --color-brand-teal: var(--brand-teal);
+  --color-brand-amber: var(--brand-amber);
+  --color-brand-rose: var(--brand-rose);
+  --color-brand-graphite: var(--brand-graphite);
+  --color-brand-ink: var(--brand-ink);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+:root {
+  /* Palet "Deep Indigo" — elegan & minimal, warna dipakai hemat tapi tetap
+     membawa makna di visualisasi. */
+  --brand-indigo: #3a3ab5; /* primary / node kota */
+  --brand-teal: #0b6e63; /* rute optimum */
+  --brand-amber: #9c6300; /* SA / termometer suhu */
+  --brand-rose: #a32347; /* sisi tabu / danger */
+  --brand-graphite: #9aa0b4; /* rute yang sedang dievaluasi */
+  --brand-ink: #0d1017; /* teks */
+
+  --background: #fafafb;
+  --foreground: #0d1017;
+  --card: #ffffff;
+  --card-foreground: #0d1017;
+  --popover: #ffffff;
+  --popover-foreground: #0d1017;
+  --primary: #3a3ab5;
+  --primary-foreground: #ffffff;
+  --secondary: #0b6e63;
+  --secondary-foreground: #ffffff;
+  --muted: #f1f2f5;
+  --muted-foreground: #5d6472;
+  --accent: #9c6300;
+  --accent-foreground: #ffffff;
+  --destructive: #a32347;
+  --border: #e4e6eb;
+  --input: #e4e6eb;
+  --ring: #3a3ab5;
+  /* Warna grafik konvergensi (Recharts) mengikuti brand */
+  --chart-1: #3a3ab5;
+  --chart-2: #0b6e63;
+  --chart-3: #9c6300;
+  --chart-4: #a32347;
+  --chart-5: #6d28d9;
+  --radius: 1rem;
+  --sidebar: oklch(0.985 0 0);
+  --sidebar-foreground: oklch(0.145 0 0);
+  --sidebar-primary: oklch(0.205 0 0);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.97 0 0);
+  --sidebar-accent-foreground: oklch(0.205 0 0);
+  --sidebar-border: oklch(0.922 0 0);
+  --sidebar-ring: oklch(0.708 0 0);
+}
+
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.87 0 0);
+  --chart-2: oklch(0.556 0 0);
+  --chart-3: oklch(0.439 0 0);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+/* ============================================================================
+   ShinyButton (integrasi komponen "shiny-button" 21st.dev)
+   CSS ditaruh di sini, bukan <style jsx>, karena styled-jsx di App Router butuh
+   StyleRegistry sendiri agar ikut terkirim pada HTML awal; tanpa itu tombol
+   sempat tampil tanpa gaya saat halaman dimuat (flicker).
+   Warna disesuaikan palet MetaPath: dasar tinta gelap, kilau indigo -> teal.
+   ============================================================================ */
+
+@property --gradient-angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --gradient-angle-offset {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@property --gradient-percent {
+  syntax: "<percentage>";
+  initial-value: 5%;
+  inherits: false;
+}
+@property --gradient-shine {
+  syntax: "<color>";
+  initial-value: white;
+  inherits: false;
+}
+
+@layer components {
+  .shiny-cta {
+    --shiny-cta-bg: var(--brand-ink);
+    --shiny-cta-bg-subtle: #1c2130;
+    --shiny-cta-fg: #ffffff;
+    --shiny-cta-highlight: var(--brand-indigo);
+    --shiny-cta-highlight-subtle: var(--brand-teal);
+    --animation: gradient-angle linear infinite;
+    --duration: 3s;
+    --shadow-size: 2px;
+    --transition: 800ms cubic-bezier(0.25, 1, 0.5, 1);
+
+    isolation: isolate;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    outline-offset: 4px;
+    padding: 1.25rem 2.5rem;
+    font-size: 1.125rem;
+    line-height: 1.2;
+    font-weight: 600;
+    border: 1px solid transparent;
+    border-radius: 360px;
+    color: var(--shiny-cta-fg);
+    background:
+      linear-gradient(var(--shiny-cta-bg), var(--shiny-cta-bg)) padding-box,
+      conic-gradient(
+          from calc(var(--gradient-angle) - var(--gradient-angle-offset)),
+          transparent,
+          var(--shiny-cta-highlight) var(--gradient-percent),
+          var(--gradient-shine) calc(var(--gradient-percent) * 2),
+          var(--shiny-cta-highlight) calc(var(--gradient-percent) * 3),
+          transparent calc(var(--gradient-percent) * 4)
+        )
+        border-box;
+    box-shadow: inset 0 0 0 1px var(--shiny-cta-bg-subtle);
+    transition: var(--transition);
+    transition-property: --gradient-angle-offset, --gradient-percent, --gradient-shine;
+  }
+
+  /* Ukuran ringkas untuk tombol di dalam panel/navbar. */
+  .shiny-cta[data-size="sm"] {
+    padding: 0.7rem 1.4rem;
+    font-size: 0.95rem;
+  }
+
+  .shiny-cta::before,
+  .shiny-cta::after,
+  .shiny-cta span::before {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset-inline-start: 50%;
+    inset-block-start: 50%;
+    translate: -50% -50%;
+    z-index: -1;
+  }
+
+  .shiny-cta:active {
+    translate: 0 1px;
+  }
+
+  /* Pola titik */
+  .shiny-cta::before {
+    --size: calc(100% - var(--shadow-size) * 3);
+    --position: 2px;
+    --space: calc(var(--position) * 2);
+    width: var(--size);
+    height: var(--size);
+    background: radial-gradient(
+        circle at var(--position) var(--position),
+        white calc(var(--position) / 4),
+        transparent 0
+      )
+      padding-box;
+    background-size: var(--space) var(--space);
+    background-repeat: space;
+    mask-image: conic-gradient(
+      from calc(var(--gradient-angle) + 45deg),
+      black,
+      transparent 10% 90%,
+      black
+    );
+    border-radius: inherit;
+    opacity: 0.4;
+    z-index: -1;
+  }
+
+  /* Kilau dalam */
+  .shiny-cta::after {
+    --animation: shimmer linear infinite;
+    width: 100%;
+    aspect-ratio: 1;
+    background: linear-gradient(-50deg, transparent, var(--shiny-cta-highlight), transparent);
+    mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+    opacity: 0.6;
+  }
+
+  .shiny-cta span {
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .shiny-cta span::before {
+    --size: calc(100% + 1rem);
+    width: var(--size);
+    height: var(--size);
+    box-shadow: inset 0 -1ex 2rem 4px var(--shiny-cta-highlight);
+    opacity: 0;
+    transition: opacity var(--transition);
+    animation: calc(var(--duration) * 1.5) breathe linear infinite;
+  }
+
+  .shiny-cta,
+  .shiny-cta::before,
+  .shiny-cta::after {
+    animation:
+      var(--animation) var(--duration),
+      var(--animation) calc(var(--duration) / 0.4) reverse paused;
+    animation-composition: add;
+  }
+
+  .shiny-cta:is(:hover, :focus-visible) {
+    --gradient-percent: 20%;
+    --gradient-angle-offset: 95deg;
+    --gradient-shine: var(--shiny-cta-highlight-subtle);
+  }
+
+  .shiny-cta:is(:hover, :focus-visible),
+  .shiny-cta:is(:hover, :focus-visible)::before,
+  .shiny-cta:is(:hover, :focus-visible)::after {
+    animation-play-state: running;
+  }
+
+  .shiny-cta:is(:hover, :focus-visible) span::before {
+    opacity: 1;
+  }
+
+  .shiny-cta[data-disabled="true"] {
+    cursor: not-allowed;
+    opacity: 0.5;
+    filter: grayscale(0.4);
+  }
+
+  /* Hormati preferensi "kurangi animasi": tombol tetap tampil, tanpa gerak. */
+  @media (prefers-reduced-motion: reduce) {
+    .shiny-cta,
+    .shiny-cta::before,
+    .shiny-cta::after,
+    .shiny-cta span::before {
+      animation: none !important;
+    }
+  }
+}
+
+@keyframes gradient-angle {
+  to {
+    --gradient-angle: 360deg;
+  }
+}
+@keyframes shimmer {
+  to {
+    rotate: 360deg;
+  }
+}
+@keyframes breathe {
+  from,
+  to {
+    scale: 1;
+  }
+  50% {
+    scale: 1.2;
+  }
+}
