@@ -38,9 +38,32 @@ export class FrameRecorder {
    * Strategi: isi anggaran frame berdasarkan prioritas kategori
    * (best -> acceptedWorse -> ordinary); tiap kategori disubsample merata.
    */
+  /**
+   * Hasilkan array frame final terurut iterasi, dengan total <= maxFrames.
+   *
+   * Dua tahap:
+   *  1. Jaring dasar — sampel merata di SELURUH rentang iterasi. Ini yang
+   *     menjamin animasi selalu sampai ke iterasi terakhir.
+   *  2. Sisa anggaran diisi berdasarkan prioritas kategori (best ->
+   *     acceptedWorse -> ordinary), supaya momen penting tetap padat terekam.
+   *
+   * Tanpa tahap 1, anggaran bisa habis diborong kategori prioritas yang
+   * kebetulan menumpuk di awal run. Itu yang terjadi pada Simulated Annealing:
+   * langkah "menerima yang lebih buruk" hampir seluruhnya muncul selagi suhu
+   * masih tinggi, sehingga animasi 15.000 iterasi berhenti di sekitar iterasi
+   * 2.100 (14% dari keseluruhan) dan sisanya tidak pernah tampil.
+   */
   finalize(): Frame[] {
     if (this.items.length <= this.maxFrames) {
       return this.items.map((x) => x.frame);
+    }
+
+    // Kunci = nomor iterasi, sekaligus mencegah frame terpilih dua kali.
+    const chosen = new Map<number, Frame>();
+
+    const baseline = Math.max(2, Math.round(this.maxFrames * 0.35));
+    for (const f of sampleUniform(this.items.map((x) => x.frame), baseline)) {
+      chosen.set(f.iteration, f);
     }
 
     const byCat: Record<FrameCategory, Frame[]> = {
@@ -50,17 +73,16 @@ export class FrameRecorder {
     };
     for (const { frame, cat } of this.items) byCat[cat].push(frame);
 
-    const chosen: Frame[] = [];
-    let remaining = this.maxFrames;
     for (const cat of ["best", "acceptedWorse", "ordinary"] as FrameCategory[]) {
+      const remaining = this.maxFrames - chosen.size;
       if (remaining <= 0) break;
-      const take = Math.min(byCat[cat].length, remaining);
-      chosen.push(...sampleUniform(byCat[cat], take));
-      remaining -= take;
+      const pool = byCat[cat].filter((f) => !chosen.has(f.iteration));
+      for (const f of sampleUniform(pool, Math.min(pool.length, remaining))) {
+        chosen.set(f.iteration, f);
+      }
     }
 
     // Urutkan kembali berdasarkan urutan iterasi agar animasi mulus.
-    chosen.sort((a, b) => a.iteration - b.iteration);
-    return chosen;
+    return [...chosen.values()].sort((a, b) => a.iteration - b.iteration);
   }
 }

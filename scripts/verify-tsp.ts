@@ -97,6 +97,19 @@ check("SA jumlah frame <= 300", sa.frames.length <= 300, `dapat ${sa.frames.leng
 check("SA costHistory full-length (== maxIterations)", sa.costHistory.length === 15000);
 check("SA costHistory monoton tidak-naik", sa.costHistory.every((c, k) => k === 0 || c <= sa.costHistory[k - 1] + 1e-9));
 check("SA frame punya field suhu", sa.frames.every((f) => typeof f.temperature === "number"));
+// Regresi: anggaran frame pernah habis diborong kategori prioritas yang menumpuk
+// di awal run, sehingga animasi SA berhenti di ~14% iterasi. Frame terakhir wajib
+// menyentuh iterasi terakhir, dan frame pertama wajib iterasi 0.
+check("SA frame mulai dari iterasi 0", sa.frames[0].iteration === 0, `dapat ${sa.frames[0].iteration}`);
+check(
+  "SA animasi mencakup sampai iterasi terakhir",
+  sa.frames[sa.frames.length - 1].iteration === sa.iterations - 1,
+  `berhenti di ${sa.frames[sa.frames.length - 1].iteration} dari ${sa.iterations - 1}`
+);
+check(
+  "SA nomor iterasi frame menaik & unik",
+  sa.frames.every((f, k) => k === 0 || f.iteration > sa.frames[k - 1].iteration)
+);
 
 console.log("\n[SA] Reproducibility (seed sama)");
 const saA = runSimulatedAnnealing(points, { seed: 999, maxIterations: 5000 });
@@ -115,6 +128,15 @@ check("TS jumlah frame <= 300", ts.frames.length <= 300, `dapat ${ts.frames.leng
 check("TS costHistory full-length (== maxIter)", ts.costHistory.length === 1000);
 check("TS costHistory monoton tidak-naik", ts.costHistory.every((c, k) => k === 0 || c <= ts.costHistory[k - 1] + 1e-9));
 check("TS frame punya snapshot tabuList", ts.frames.every((f) => Array.isArray(f.tabuList)));
+check(
+  "TS animasi mencakup sampai iterasi terakhir",
+  ts.frames[ts.frames.length - 1].iteration === ts.iterations - 1,
+  `berhenti di ${ts.frames[ts.frames.length - 1].iteration} dari ${ts.iterations - 1}`
+);
+check(
+  "TS nomor iterasi frame menaik & unik",
+  ts.frames.every((f, k) => k === 0 || f.iteration > ts.frames[k - 1].iteration)
+);
 
 console.log("\n[TS] Reproducibility (seed sama)");
 const tsA = runTabuSearch(points, { seed: 999, maxIter: 500 });
