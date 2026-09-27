@@ -5,7 +5,7 @@
 
 import { useState } from "react";
 import { motion, useReducedMotion } from "motion/react";
-import { Trophy, Timer, Repeat2, Info } from "lucide-react";
+import { Trophy, Timer, Repeat2, Info, Sparkles } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { RouteCanvas } from "./RouteCanvas";
@@ -17,43 +17,46 @@ import { useRunStore } from "@/lib/store/useRunStore";
 import { validateCityCount } from "@/lib/parsing/validate";
 import { MAX_CITIES_ANIMATION } from "@/lib/config";
 
-/** Letupan kecil saat rekor rute terbaik pecah (gamifikasi ringan). */
-function Confetti({
+/**
+ * Penanda kecil saat rekor rute terbaik pecah.
+ *
+ * Sebelumnya ini letupan konfeti dari TENGAH kanvas, sehingga titik-titiknya
+ * jatuh tepat di atas rute yang sedang diamati — pada kecepatan tinggi rekor
+ * sering pecah dan kanvas jadi penuh serpihan warna. Sekarang muncul sebagai
+ * lencana di pojok, jadi rutenya tidak pernah tertutup.
+ */
+function BestRecordBadge({
   triggerKey,
   disabled,
 }: {
   triggerKey: number;
   disabled: boolean;
 }) {
-  // Dimatikan sepenuhnya bila pengguna meminta prefers-reduced-motion.
-  if (disabled || triggerKey === 0) return null;
-  const colors = [
-    "var(--brand-indigo)",
-    "var(--brand-teal)",
-    "var(--brand-amber)",
-    "var(--brand-rose)",
-  ];
+  if (triggerKey === 0) return null;
   return (
-    <div className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center">
-      {Array.from({ length: 14 }).map((_, i) => {
-        const angle = (i / 14) * Math.PI * 2;
-        return (
-          <motion.span
-            key={`${triggerKey}-${i}`}
-            className="absolute size-2 rounded-full"
-            style={{ background: colors[i % colors.length] }}
-            initial={{ opacity: 1, x: 0, y: 0, scale: 1 }}
-            animate={{
-              opacity: 0,
-              x: Math.cos(angle) * 110,
-              y: Math.sin(angle) * 110,
-              scale: 0.3,
-            }}
-            transition={{ duration: 0.7, ease: "easeOut" }}
-          />
-        );
-      })}
-    </div>
+    // Satu elemen saja, diposisikan absolut sendiri, dengan key = nomor rekor.
+    // Sengaja TANPA AnimatePresence: pembungkusnya menahan lencana lama selama
+    // animasi keluar, dan karena isinya position:static lencana yang menumpuk
+    // tersusun ke bawah — saat rekor pecah beruntun, kanvas jadi berisi kolom
+    // lencana. Keyframes di bawah padam sendiri, jadi animasi keluar tak perlu.
+    <motion.div
+      key={triggerKey}
+      aria-hidden="true"
+      className="pointer-events-none absolute right-3 top-3 z-10 flex items-center gap-1.5 rounded-full border border-secondary/40 bg-[color-mix(in_oklab,var(--secondary)_12%,var(--card))] px-2.5 py-1 text-xs font-semibold text-secondary shadow-sm"
+      initial={{ opacity: 0, y: -6, scale: 0.9 }}
+      // Pada prefers-reduced-motion lencananya tetap muncul — hanya memudar,
+      // tanpa gerak maupun perubahan ukuran. Menyembunyikannya sama saja
+      // membuang informasi "rekor pecah" bagi pengguna itu.
+      animate={
+        disabled
+          ? { opacity: [0, 1, 1, 0], y: 0, scale: 1 }
+          : { opacity: [0, 1, 1, 0], y: [-6, 0, 0, 0], scale: [0.9, 1, 1, 1] }
+      }
+      transition={{ duration: 1.4, times: [0, 0.14, 0.72, 1] }}
+    >
+      <Sparkles className="size-3.5" aria-hidden="true" />
+      Rekor baru
+    </motion.div>
   );
 }
 
@@ -170,13 +173,13 @@ export function Visualizer() {
               duration={duration}
               showCurrent={canAnimate}
             />
-            <Confetti triggerKey={burst} disabled={!!reduceMotion} />
+            <BestRecordBadge triggerKey={burst} disabled={!!reduceMotion} />
           </div>
           {canAnimate && <AnimationControls />}
         </div>
 
         {/* Kanan: panel edukasi */}
-        <Card className="rounded-3xl">
+        <Card className="h-fit rounded-3xl">
           <CardHeader>
             <CardTitle className="text-base">Apa yang sedang terjadi?</CardTitle>
           </CardHeader>

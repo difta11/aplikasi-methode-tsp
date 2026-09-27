@@ -60,11 +60,11 @@ export function AnimationControls() {
           <RotateCcw className="size-4" />
         </Button>
 
-        <div className="ml-auto text-sm text-muted-foreground">
+        {/* tabular-nums di seluruh blok: tanpa ini lebar angka berubah tiap frame
+            dan seluruh baris penghitung bergeser kiri-kanan saat animasi jalan. */}
+        <div className="ml-auto text-sm text-muted-foreground tabular-nums">
           Iterasi{" "}
-          <span className="font-semibold text-foreground tabular-nums">
-            {frame.iteration + 1}
-          </span>{" "}
+          <span className="font-semibold text-foreground">{frame.iteration + 1}</span>{" "}
           / {result.iterations}
           <span className="mx-2 text-border">|</span>
           frame {frameIndex + 1}/{total}

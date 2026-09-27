@@ -3,7 +3,7 @@
 // Kanvas rute TSP. Tiap "slot sisi" ke-i adalah satu <motion.line> yang animasi
 // ujung-ujungnya berpindah saat rute berubah -> efek rute bermorf halus.
 //
-// Warna: rute TERBAIK = Teal tebal, rute SAAT INI = Indigo tipis transparan.
+// Warna: rute TERBAIK = teal tebal, rute SAAT INI = abu grafit tipis.
 
 import { useMemo } from "react";
 import { motion, useReducedMotion } from "motion/react";
