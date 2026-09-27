@@ -1,3 +1,7 @@
+import math
+import random
+import time
+
 def run_simulated_annealing(
     places,
     cooling_rate=0.99,

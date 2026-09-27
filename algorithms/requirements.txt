@@ -1,0 +1,16 @@
+# Dependensi untuk menjalankan kode rujukan Python di folder ini.
+#   python -m venv .venv
+#   .venv/Scripts/activate      (Windows)   |   source .venv/bin/activate  (macOS/Linux)
+#   pip install -r algorithms/requirements.txt
+#
+# Catatan: aplikasi web di repo ini TIDAK memakai Python. Algoritmanya sudah
+# diport ke TypeScript di lib/tsp/ dan berjalan sepenuhnya di browser.
+# Berkas ini hanya agar kode rujukan di bawah ini bisa dijalankan ulang.
+
+# tabu-search.py — API Flask + pembacaan CSV/Excel
+Flask==3.1.0
+pandas==2.2.3
+openpyxl==3.1.5      # dibutuhkan pandas.read_excel untuk berkas .xlsx
+
+# simulated-annealing.py hanya memakai pustaka bawaan (math, random, time),
+# jadi tidak menambah dependensi apa pun.
